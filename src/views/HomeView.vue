@@ -1,18 +1,21 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <TheBanner></TheBanner>
   </div>
 </template>
 
-<script>
+<script setup>
+import TheBanner from '../components/HomeComponents/TheBanner.vue'
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import { ref } from "vue";
+import { useUserStore } from "../store/userStore.js";
 
-export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
-  }
-}
+const store = useUserStore();
+const userName = store.name;
 </script>
+
+<style scoped lang="less">
+.home {
+  
+}
+</style>
