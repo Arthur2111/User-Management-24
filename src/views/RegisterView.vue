@@ -1,9 +1,11 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div class="auth">
+    <AuthForm></AuthForm>
   </div>
 </template>
 
-<script>
+<script setup>
+
+import AuthForm from '../components/AuthComponents/AuthForm.vue'
 
 </script>

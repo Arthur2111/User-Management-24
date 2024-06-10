@@ -13,16 +13,13 @@
       </p>
 
       <div class="cta-btns">
-        <router-link class="primary-cta" :to="{ name: 'register' }"
-          >Sign Up Now</router-link
-        >
+        <router-link class="primary-cta" :to="{ name: 'register' }">Sign Up Now</router-link>
         <router-link class="secondary-cta" :to="{ name: 'dashboard' }">
           <span>Live Dashboard Here</span>
           <svg viewBox="0 0 19 9" fill="none">
             <path
               d="M18.3536 4.85355C18.5488 4.65829 18.5488 4.34171 18.3536 4.14645L15.1716 0.964466C14.9763 0.769204 14.6597 0.769204 14.4645 0.964466C14.2692 1.15973 14.2692 1.47631 14.4645 1.67157L17.2929 4.5L14.4645 7.32843C14.2692 7.52369 14.2692 7.84027 14.4645 8.03553C14.6597 8.2308 14.9763 8.2308 15.1716 8.03553L18.3536 4.85355ZM0 5H18V4H0V5Z"
-              fill="black"
-            />
+              fill="black" />
           </svg>
         </router-link>
       </div>
@@ -63,14 +60,28 @@
 <script></script>
 
 <style scoped lang="less">
-
 @keyframes left-animation {
-  from {opacity: 0; transform: translateX(-10px);}
-  to {opacity: 1; transform: translateX(0);}
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
+
 @keyframes right-animation {
-  from {opacity: 0; transform: translateX(10px);}
-  to {opacity: 1; transform: translateX(0);}
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .wrapper-home {
@@ -83,8 +94,10 @@
     flex-direction: column;
     align-items: center;
   }
+
   .left-section {
     width: 45%;
+
     @media only screen and (max-width: 800px) {
       width: 100%;
     }
@@ -97,8 +110,13 @@
       font-weight: normal;
       margin: 0;
       text-align: left;
+
       span {
         white-space: nowrap;
+        
+        @media all and (max-width: 680px) {
+          white-space: wrap;
+        }
       }
     }
 
@@ -111,6 +129,7 @@
       margin: 5em 0;
       display: flex;
       gap: 2em;
+
       .primary-cta {
         background-color: rgb(15, 35, 66);
         font-size: 1.8rem;
@@ -157,15 +176,18 @@
 
     animation-name: right-animation;
     animation-duration: 1s;
+
     .premium-actions {
       display: flex;
       justify-content: start;
       align-items: center;
       gap: 2.2em;
+
       .crud-txt {
         font-weight: bold;
         min-width: 15%;
       }
+
       p {
         color: rgb(255, 255, 255);
         text-align: left;
