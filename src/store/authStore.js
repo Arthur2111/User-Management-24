@@ -24,7 +24,7 @@ export const useAuthStore = defineStore("auth", () => {
             } else {
 
                 const expiresIn = +response.data.expiresIn * 1000;
-                const expirationDate = new Date().getTime + expiresIn;
+                const expirationDate = new Date().getTime() + expiresIn;
 
                 localStorage.setItem('userID', response.data.localId)
                 localStorage.setItem('token', response.data.idToken)
@@ -59,7 +59,7 @@ export const useAuthStore = defineStore("auth", () => {
             } else {
 
                 const expiresIn = +response.data.expiresIn * 1000;
-                const expirationDate = new Date().getTime + expiresIn;
+                const expirationDate = new Date().getTime() + expiresIn;
 
 
 
@@ -88,7 +88,7 @@ export const useAuthStore = defineStore("auth", () => {
 
         const expiresIn = +tokenExpiration - new Date().getTime()
 
-        if (expiresIn < 10000) {
+        if (expiresIn < 1000) {
             return
         }
 

@@ -50,6 +50,7 @@ const formIsValid = ref(true)
 const mode = ref('login')
 const isLoading = ref(false)
 const error = ref(null)
+const createPassWordError = ref(false)
 
 
 async function submitForm() {
@@ -61,6 +62,7 @@ async function submitForm() {
     try {
         if (email.value === '' || !email.value.includes('@') || password.value.length < 6) {
             formIsValid.value = false
+            isLoading.value = false
             return
         }
 
