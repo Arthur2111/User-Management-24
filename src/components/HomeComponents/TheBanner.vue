@@ -2,7 +2,7 @@
   <div class="wrapper-home">
     <div class="left-section">
       <h1>
-        <span>DIGIFI YOUR LIFE </span> <br />
+        <span>DIGIFIV YOUR LIFE </span> <br />
         USER MANAGE NOW
       </h1>
       <p class="sub-head">
