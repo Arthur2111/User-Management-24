@@ -1,14 +1,17 @@
 <template>
   <div class="wrapper">
-    <TheDashboard @showAddUserForm="showCreateUserForm" @showEditUserForm="showEditUserForm" @showRemoveUserAlert="showRemoveUserAlert" ></TheDashboard>
+    <TheDashboard @showAddUserForm="showCreateUserForm" @showEditUserForm="showEditUserForm"
+      @showRemoveUserAlert="showRemoveUserAlert"></TheDashboard>
     <UserForm v-if="createUserFormState" @closeFormComponent="closeFormComponent"></UserForm>
-    <UpdateUserForm v-if="editUserFormState" :mode="'edit'" :id="selectedIdForEdit" @closeUpdateUserFormComponent="closeFormComponent">
+    <UpdateUserForm v-if="editUserFormState" :mode="'edit'" :id="selectedIdForEdit"
+      @closeUpdateUserFormComponent="closeFormComponent">
     </UpdateUserForm>
-    <DeleteUser v-if="deleteUserAlertState" :id="selectedIdForDelete" @closeDeleteUserComponent="closeFormComponent"></DeleteUser>
+    <DeleteUser v-if="deleteUserAlertState" :id="selectedIdForDelete" @closeDeleteUserComponent="closeFormComponent">
+    </DeleteUser>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 import UserForm from '@/components/DashboardComponents/UserForm.vue';
 import DeleteUser from '@/components/DashboardComponents/DeleteUser.vue'
@@ -16,11 +19,11 @@ import UpdateUserForm from '@/components/DashboardComponents/UpdateUserForm.vue'
 import TheDashboard from '../components/TheDashboard.vue'
 import { ref } from 'vue';
 
-const createUserFormState = ref(false)
-const editUserFormState = ref(false)
-const deleteUserAlertState = ref(false)
-const selectedIdForEdit = ref(null)
-const selectedIdForDelete = ref(null)
+const createUserFormState = ref<boolean>(false)
+const editUserFormState = ref<boolean>(false)
+const deleteUserAlertState = ref<boolean>(false)
+const selectedIdForEdit = ref<null | string>(null)
+const selectedIdForDelete = ref<null | string>(null)
 
 function showCreateUserForm() {
   createUserFormState.value = true
@@ -32,7 +35,7 @@ function closeFormComponent() {
   deleteUserAlertState.value = false
 }
 
-function showEditUserForm(id) {
+function showEditUserForm(id: string) {
   selectedIdForEdit.value = id
 
   if (!selectedIdForEdit.value) return
@@ -40,7 +43,7 @@ function showEditUserForm(id) {
   editUserFormState.value = true
 }
 
-function showRemoveUserAlert(id){
+function showRemoveUserAlert(id: string) {
   console.log(id);
 
   selectedIdForDelete.value = id

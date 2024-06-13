@@ -5,20 +5,46 @@ import { useAuthStore } from "./authStore";
 
 export const useUserStore = defineStore("user", () => {
 
-  const count = ref(0);
-  const usersData = ref([]);
+  interface Data {
+    name: string,
+    email: string,
+    phoneNumber: string,
+    role: string
+  }
+
+
+  interface usersData {
+    id: string,
+    name: string,
+    email: string,
+    phoneNumber: string,
+    role: string
+  }
+
+  const count = ref<number>(0);
+  const usersData = ref<{
+    id: string,
+    name: string,
+    email: string,
+    phoneNumber: string,
+    role: string
+  }[]>([]);
+
   const activeRoleFilter = ref({
     admin: true,
     user: true,
     guest: true
   })
 
+
+
   const authStore = useAuthStore()
 
   const userList = computed(() => usersData)
 
-  async function createUser(data) {
-    const token = authStore.returnToken.value 
+  async function createUser(data: Data) {
+
+    const token = authStore.returnToken.value
     try {
       const response = await axios.post(`https://user-manager-db-84315-default-rtdb.asia-southeast1.firebasedatabase.app/users.json?auth=${token}`, {
         name: data.name,
@@ -35,14 +61,14 @@ export const useUserStore = defineStore("user", () => {
       }
 
 
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       return { code: e.response.status, msg: 'something went wrong' }
     }
 
   }
-  async function updateUser(id, data) {
-    const token = authStore.returnToken.value 
+  async function updateUser(id: string, data: Data) {
+    const token = authStore.returnToken.value
 
     try {
       const response = await axios.put(`https://user-manager-db-84315-default-rtdb.asia-southeast1.firebasedatabase.app/users/${id}.json?auth=${token}`, {
@@ -65,8 +91,8 @@ export const useUserStore = defineStore("user", () => {
     }
 
   }
-  async function deleteUser(id) {
-    const token = authStore.returnToken.value 
+  async function deleteUser(id: string) {
+    const token = authStore.returnToken.value
 
     try {
       const response = await axios.delete(`https://user-manager-db-84315-default-rtdb.asia-southeast1.firebasedatabase.app/users/${id}.json?auth=${token}`)
@@ -88,6 +114,10 @@ export const useUserStore = defineStore("user", () => {
     try {
       const response = await axios.get('https://user-manager-db-84315-default-rtdb.asia-southeast1.firebasedatabase.app/users.json')
       let usersArr = []
+
+      console.log(response.data);
+
+
       if (response.status == 200) {
         const users = response.data
         for (let user in users) {
@@ -101,8 +131,10 @@ export const useUserStore = defineStore("user", () => {
           }
           usersArr.push(getUser)
         }
+
         usersData.value = usersArr
         return { code: response.status, msg: 'successfully retrieved' }
+
       } else {
         throw new Error('Ooops something went wrong')
       }

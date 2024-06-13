@@ -2,14 +2,20 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import axios from 'axios'
 
-let timer
+let timer: number
 
 export const useAuthStore = defineStore("auth", () => {
 
-    const userId = ref(null)
-    const tokenID = ref(null)
+    const userId = ref<null | string>(null)
+    const tokenID = ref<null | string>(null)
 
-    async function signup(payload) {
+    interface Payload {
+        email: string,
+        password: string,
+        returnSecureToken: boolean
+    }
+
+    async function signup(payload: Payload) {
 
         try {
             const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAE4d5A0T-lpGmWaYUGWFmncOBMahEZGoA', {
@@ -28,7 +34,7 @@ export const useAuthStore = defineStore("auth", () => {
 
                 localStorage.setItem('userID', response.data.localId)
                 localStorage.setItem('token', response.data.idToken)
-                localStorage.setItem('expirationToken', expirationDate)
+                localStorage.setItem('expirationToken', expirationDate.toString())
 
                 userId.value = response.data.localId
                 tokenID.value = response.data.idToken
@@ -39,13 +45,13 @@ export const useAuthStore = defineStore("auth", () => {
 
                 return { code: response.status, msg: 'Success' }
             }
-        } catch (e) {
+        } catch (e: any) {
 
             return { code: e.response.status, msg: e.response.data.error.message }
         }
     }
 
-    async function login(payload) {
+    async function login(payload: Payload) {
         try {
             const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAE4d5A0T-lpGmWaYUGWFmncOBMahEZGoA', {
                 email: payload.email,
@@ -65,7 +71,7 @@ export const useAuthStore = defineStore("auth", () => {
 
                 localStorage.setItem('userID', response.data.localId)
                 localStorage.setItem('token', response.data.idToken)
-                localStorage.setItem('expirationToken', expirationDate)
+                localStorage.setItem('expirationToken', expirationDate.toString())
 
                 userId.value = response.data.localId
                 tokenID.value = response.data.idToken
@@ -77,7 +83,7 @@ export const useAuthStore = defineStore("auth", () => {
                 return { code: response.status, msg: 'Success' }
             }
 
-        } catch (e) {
+        } catch (e: any) {
             return { code: e.response.status, msg: e.response.data.error.message }
         }
     }
@@ -86,21 +92,27 @@ export const useAuthStore = defineStore("auth", () => {
         const id = localStorage.getItem('userID')
         const tokenExpiration = localStorage.getItem('expirationToken')
 
-        const expiresIn = +tokenExpiration - new Date().getTime()
+        let expiresIn: number
 
-        if (expiresIn < 1000) {
-            return
+        if (tokenExpiration) {
+
+            expiresIn = +tokenExpiration - new Date().getTime()
+
+            if (expiresIn < 1000) {
+                return
+            }
+            timer = setTimeout(function () {
+                logout()
+            }, expiresIn)
+
         }
-
-        timer = setTimeout(function () {
-            logout()
-        }, expiresIn)
 
         if (token && id) {
             userId.value = id
             tokenID.value = token
         }
     }
+
     function logout() {
         userId.value = null
         tokenID.value = null
@@ -116,5 +128,6 @@ export const useAuthStore = defineStore("auth", () => {
     const returnToken = computed(() => {
         return tokenID
     })
+
     return { userId, tokenID, signup, login, returnToken, logout, tryLogin }
 })

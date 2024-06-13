@@ -6,7 +6,8 @@
       <BaseButton @click="store.getUsersList()">Refresh List</BaseButton>
       <BaseButton @click="openFormComponent">Add New User</BaseButton>
     </div>
-    <ThePagination :currPage="currPage" :pageSize="pageSize" :users="allUserData" @handleUpdatePage="updatePage" ></ThePagination>
+    <ThePagination :currPage="currPage" :pageSize="pageSize" :users="allUserData" @handleUpdatePage="updatePage">
+    </ThePagination>
 
     <ul class="responsive-table">
       <li class="table-header">
@@ -37,7 +38,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BaseButton from './Modal/BaseButton.vue'
 import ThePagination from './DashboardComponents/ThePagination.vue'
 import UserFilter from './DashboardComponents/UserFilter.vue'
@@ -46,8 +47,15 @@ import { computed, defineEmits, ref } from 'vue'
 
 const store = useUserStore()
 
-const emit = defineEmits(['showAddUserForm', 'showEditUserForm'])
-const activeRoleFilter = ref({
+
+interface Filter {
+  admin: boolean,
+  user: boolean,
+  guest: boolean
+}
+
+const emit = defineEmits(['showAddUserForm', 'showEditUserForm','showRemoveUserAlert'])
+const activeRoleFilter = ref<Filter>({
   admin: true,
   user: true,
   guest: true
@@ -56,10 +64,16 @@ const activeRoleFilter = ref({
 const currPage = ref(0)
 const pageSize = ref(5)
 const allUserData = store.userList
-const formattedFilteredUsers = ref([]) 
+const formattedFilteredUsers = ref<{
+  id: string,
+  name: string,
+  email: string,
+  phoneNumber: string,
+  role: string
+}[]>([])
 
 // handle filtered values
-function setFilters(filter) {
+function setFilters(filter: Filter) {
   activeRoleFilter.value = filter
 }
 const filteredData = computed(() => {
@@ -86,11 +100,11 @@ const filteredData = computed(() => {
 
 
 // pagination functions
-function updatePage(pageNumber) {
+function updatePage(pageNumber:number) {
   currPage.value = pageNumber;
   updateVisibleUser(formattedFilteredUsers.value);
 }
-function updateVisibleUser(filteredUsers) {
+function updateVisibleUser(filteredUsers: any ) {
   let visibleUser = filteredUsers.slice(currPage.value * pageSize.value, (currPage.value * pageSize.value) + pageSize.value)
 
   if (visibleUser.length == 0 && currPage.value > 0) {
@@ -105,10 +119,11 @@ function openFormComponent() {
   console.log('hello world');
   emit('showAddUserForm')
 }
-function showEditForm(id) {
+function showEditForm(id:string) {
   emit('showEditUserForm', id)
 }
-function showRemoveUserAlert(id) {
+function showRemoveUserAlert(id:string) {
+  
   emit('showRemoveUserAlert', id)
 }
 
